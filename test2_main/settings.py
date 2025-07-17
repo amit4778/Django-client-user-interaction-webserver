@@ -30,11 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # CSRF trusted origins for Replit
-CSRF_TRUSTED_ORIGINS = [
-    'https://*.repl.co',
-    'https://*.replit.dev',
-    'https://*.replit.com',
-]
+CSRF_TRUSTED_ORIGINS = []
 
 
 # Application definition
