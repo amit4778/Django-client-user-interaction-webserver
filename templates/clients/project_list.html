@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}My Projects - Client Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="header-content">
+        <h2>My Projects</h2>
+        <a href="{% url 'project_create' %}" class="btn btn-primary">Create New Project</a>
+    </div>
+</div>
+
+<div class="project-grid">
+    {% for project in projects %}
+        <div class="project-card">
+            <h3>
+                <a href="#" class="project-name-link" data-project-id="{{ project.id }}">
+                    {{ project.project_name }}
+                </a>
+            </h3>
+            <p><strong>Client:</strong> 
+                <a href="#" class="client-name-link" data-client-id="{{ project.client.id }}">{{ project.client.client_name }}</a>
+            </p>
+            <p><strong>Created by:</strong> 
+                <a href="#" class="user-name-link" data-user-id="{{ project.created_by.id }}">{{ project.created_by.username }}</a>
+            </p>
+            <p><strong>Assigned Users:</strong> 
+                {% for user in project.users.all %}
+                    <a href="#" class="user-name-link" data-user-id="{{ user.id }}">{{ user.username }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <div class="card-actions">
+                <a href="#" class="btn btn-info">View</a>
+                <a href="#" class="btn btn-warning">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No projects assigned to you.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Client Management System{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1><a href="{% url 'home' %}">Client Management System</a></h1>
+                <ul class="nav-menu">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'client_list' %}">Clients</a></li>
+                        <li><a href="{% url 'user_list' %}">Users</a></li>
+                        <li><a href="{% url 'project_list' %}">My Projects</a></li>
+                        <li><a href="/admin/">Admin</a></li>
+                        <li><span>Hello, {{ user.username }}!</span></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                        <li><button id="toggleSidebar" class="btn btn-info">JSON View</button></li>
+                    {% else %}
+                        <li><a href="/admin/login/">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-wrapper">
+        <main class="main-content">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <!-- JSON Sidebar -->
+        <div id="jsonSidebar" class="json-sidebar">
+            <div class="sidebar-header">
+                <h3>JSON Response</h3>
+                <button id="closeSidebar" class="close-btn">&times;</button>
+            </div>
+            <div class="sidebar-content">
+                <pre id="jsonContent">Click on any client or user name to see JSON data</pre>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Client Management System</p>
+    </footer>
+
+    <script>
+        // Sidebar functionality
+        const sidebar = document.getElementById('jsonSidebar');
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+        const jsonContent = document.getElementById('jsonContent');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (sidebar.classList.contains('open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+
+        closeBtn.addEventListener('click', closeSidebar);
+
+        // Load JSON data
+        function loadClientJSON(clientId) {
+            fetch(`/json/clients/${clientId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    jsonContent.textContent = JSON.stringify(data, null, 2);
+                    openSidebar();
+                })
+                .catch(error => {
+                    jsonContent.textContent = 'Error loading data: ' + error;
+                    openSidebar();
+                });
+        }
+
+        function loadUserJSON(userId) {
+            fetch(`/json/users/${userId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    jsonContent.textContent = JSON.stringify(data, null, 2);
+                    openSidebar();
+                })
+                .catch(error => {
+                    jsonContent.textContent = 'Error loading data: ' + error;
+                    openSidebar();
+                });
+        }
+
+        function loadProjectJSON(projectId) {
+            fetch(`/json/projects/${projectId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    jsonContent.textContent = JSON.stringify(data, null, 2);
+                    openSidebar();
+                })
+                .catch(error => {
+                    jsonContent.textContent = 'Error loading data: ' + error;
+                    openSidebar();
+                });
+        }
+
+        // Add click handlers to client and user links
+        document.addEventListener('DOMContentLoaded', function() {
+            // Client name links
+            document.querySelectorAll('.client-name-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const clientId = this.dataset.clientId;
+                    loadClientJSON(clientId);
+                });
+            });
+
+            // User name links
+            document.querySelectorAll('.user-name-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const userId = this.dataset.userId;
+                    loadUserJSON(userId);
+                });
+            });
+
+             // Project name links
+             document.querySelectorAll('.project-name-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const projectId = this.dataset.projectId;
+                    loadProjectJSON(projectId);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

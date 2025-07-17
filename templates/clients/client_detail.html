@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ client.client_name }} - Client Management System{% endblock %}
+
+{% block content %}
+<div class="client-detail-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h2>{{ client.client_name }}</h2>
+            <div class="header-actions">
+                <a href="{% url 'project_create' client.id %}" class="btn btn-primary">Create Project</a>
+                <a href="{% url 'client_edit' client.id %}" class="btn btn-warning">Edit Client</a>
+                <a href="{% url 'client_delete' client.id %}" class="btn btn-danger">Delete Client</a>
+                <a href="{% url 'client_list' %}" class="btn btn-secondary">Back to Clients</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="client-info">
+        <div class="info-card">
+            <h3>Client Information</h3>
+            <p><strong>Name:</strong> {{ client.client_name }}</p>
+            <p><strong>Created by:</strong> 
+                <a href="#" class="user-name-link" data-user-id="{{ client.created_by.id }}">{{ client.created_by.username }}</a>
+            </p>
+            <p><strong>Created on:</strong> {{ client.created_at|date:"F d, Y" }}</p>
+            <p><strong>Last updated:</strong> {{ client.updated_at|date:"F d, Y" }}</p>
+        </div>
+    </div>
+
+    <div class="projects-section">
+        <h3>Projects</h3>
+        {% if projects %}
+            <div class="project-grid">
+                {% for project in projects %}
+                    <div class="project-card">
+                        <h4>{{ project.project_name }}</h4>
+                        <p><strong>Client:</strong> {{ project.client.client_name }}</p>
+                        <p><strong>Created on:</strong> {{ project.created_at|date:"F d, Y" }}</p>
+                        <p><strong>Assigned Users:</strong> 
+                            {% for user in project.users.all %}
+                                {{ user.username }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                No users assigned
+                            {% endfor %}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No projects created for this client yet.</p>
+            <a href="{% url 'project_create' client.id %}" class="btn btn-primary">Create First Project</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

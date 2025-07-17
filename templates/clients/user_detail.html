@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+
+{% block title %}{{ user_obj.username }} - User Details{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="header-content">
+        <h2>User: {{ user_obj.username }}</h2>
+        <div class="header-actions">
+            <a href="{% url 'user_edit' user_obj.id %}" class="btn btn-warning">Edit User</a>
+            <a href="{% url 'user_delete' user_obj.id %}" class="btn btn-danger">Delete User</a>
+            <a href="{% url 'user_list' %}" class="btn btn-secondary">Back to Users</a>
+        </div>
+    </div>
+</div>
+
+<div class="user-info">
+    <div class="info-card">
+        <h3>User Information</h3>
+        <p><strong>Username:</strong> {{ user_obj.username }}</p>
+        <p><strong>First Name:</strong> {{ user_obj.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user_obj.last_name }}</p>
+        <p><strong>Email:</strong> {{ user_obj.email }}</p>
+        <p><strong>Date Joined:</strong> {{ user_obj.date_joined }}</p>
+    </div>
+</div>
+
+<div class="projects-section">
+    <h3>Assigned Projects ({{ projects.count }})</h3>
+    {% if projects %}
+        <div class="project-grid">
+            {% for project in projects %}
+                <div class="project-card">
+                    <h4>{{ project.project_name }}</h4>
+                    <p><strong>Client:</strong> 
+                        <a href="{% url 'client_detail' project.client.id %}" class="client-name-link" data-client-id="{{ project.client.id }}">
+                            {{ project.client.client_name }}
+                        </a>
+                    </p>
+                    <p><strong>Created:</strong> {{ project.created_at }}</p>
+                    <p><strong>Created by:</strong> {{ project.created_by.username }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No projects assigned to this user.</p>
+    {% endif %}
+</div>
+{% endblock %}

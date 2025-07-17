@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+
+{% block title %}{% if client %}Edit{% else %}Create{% endif %} Client - Client Management System{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="page-header">
+        <h2>{% if client %}Edit Client{% else %}Create New Client{% endif %}</h2>
+    </div>
+    
+    <form method="post" class="client-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="client_name">Client Name:</label>
+            <input type="text" id="client_name" name="client_name" 
+                   value="{% if client %}{{ client.client_name }}{% endif %}" 
+                   required class="form-control">
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                {% if client %}Update Client{% else %}Create Client{% endif %}
+            </button>
+            <a href="{% if client %}{% url 'client_detail' client.id %}{% else %}{% url 'client_list' %}{% endif %}" 
+               class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

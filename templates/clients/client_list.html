@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Clients - Client Management System{% endblock %}
+
+{% block content %}
+<div class="client-list-container">
+    <div class="page-header">
+        <h2>Clients</h2>
+        <a href="{% url 'client_create' %}" class="btn btn-primary">Add New Client</a>
+    </div>
+
+    {% if clients %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client Name</th>
+                        <th>Created By</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td>{{ client.id }}</td>
+                            <td>
+                                <a href="#" class="client-name-link" data-client-id="{{ client.id }}">{{ client.client_name }}</a>
+                                <a href="{% url 'client_detail' client.id %}" class="btn btn-sm btn-link">View Details</a>
+                            </td>
+                            <td>
+                                <a href="#" class="user-name-link" data-user-id="{{ client.created_by.id }}">{{ client.created_by.username }}</a>
+                            </td>
+                            <td>{{ client.created_at|date:"Y-m-d H:i:s" }}</td>
+                            <td>{{ client.updated_at|date:"Y-m-d H:i:s" }}</td>
+                            <td class="actions">
+                                <a href="{% url 'client_detail' client.id %}" class="btn btn-sm btn-info">View</a>
+                                <a href="{% url 'client_edit' client.id %}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{% url 'client_delete' client.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No clients found. <a href="{% url 'client_create' %}">Create the first client</a>.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

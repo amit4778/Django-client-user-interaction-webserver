@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ user_obj.username }} - Client Management System{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="page-header">
+        <h2>Delete User</h2>
+    </div>
+    
+    <div class="delete-confirmation">
+        <p><strong>Are you sure you want to delete user "{{ user_obj.username }}"?</strong></p>
+        <p>This action cannot be undone. The user will be removed from all assigned projects.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{% url 'user_detail' user_obj.id %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Create Project for {{ client.client_name }} - Client Management System{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="page-header">
+        <h2>Create Project for {{ client.client_name }}</h2>
+    </div>
+    
+    <form method="post" class="project-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="project_name">Project Name:</label>
+            <input type="text" id="project_name" name="project_name" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label>Assign Users:</label>
+            <div class="user-selection">
+                {% for user in users %}
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="user_{{ user.id }}" name="users" value="{{ user.id }}">
+                        <label for="user_{{ user.id }}">{{ user.username }} ({{ user.first_name }} {{ user.last_name }})</label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create Project</button>
+            <a href="{% url 'client_detail' client.id %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

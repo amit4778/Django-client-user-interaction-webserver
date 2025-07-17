@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Users - Client Management System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="header-content">
+        <h2>Users</h2>
+        <a href="{% url 'user_create' %}" class="btn btn-primary">Add New User</a>
+    </div>
+</div>
+
+<div class="user-grid">
+    {% for user_obj in users %}
+        <div class="user-card">
+            <h3>
+                <a href="#" class="user-name-link" data-user-id="{{ user_obj.id }}">
+                    {{ user_obj.username }}
+                </a>
+                <a href="{% url 'user_detail' user_obj.id %}" class="btn btn-sm btn-link">View Details</a>
+            </h3>
+            <p><strong>Name:</strong> {{ user_obj.first_name }} {{ user_obj.last_name }}</p>
+            <p><strong>Email:</strong> {{ user_obj.email }}</p>
+            <p><strong>Projects:</strong> {{ user_obj.assigned_projects.count }}</p>
+            <div class="card-actions">
+                <a href="{% url 'user_detail' user_obj.id %}" class="btn btn-info">View</a>
+                <a href="{% url 'user_edit' user_obj.id %}" class="btn btn-warning">Edit</a>
+                <a href="{% url 'user_delete' user_obj.id %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No users found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
