@@ -30,20 +30,44 @@ API: Django REST Framework
 
 Authentication: Django's built-in authentication system
 
-Project Structure
-├── clients/                 # Main Django app
-│   ├── migrations/         # Database migrations
-│   ├── models.py          # Data models (Client, Project)
-│   ├── views.py           # View controllers
-│   ├── urls.py            # URL routing
-│   └── admin.py           # Django admin configuration
-├── templates/              # HTML templates
-│   ├── clients/           # App-specific templates
-│   └── base.html          # Base template
-├── static/                 # Static files (CSS, JS)
-├── test2_main/            # Django project settings
-└── main.py                # Application entry point
 
+Project Structure:
+
+clients/
+
+    migrations/
+
+        models.py
+
+        views.py
+
+        urls.py
+
+        admin.py
+
+templates/
+
+    clients/
+        client_confirm_delete.html
+        client_detail.html
+        client_form.html
+        client_list.html
+        home.html
+        logout.html
+        project_form.html
+        project_list.html
+        user_confirm_delete.html
+        user_detail.html
+        user_form.html
+        user_list.html
+
+    base.html
+
+static/
+
+    test2_main/
+
+manage.py
 Models
 
 Client:
