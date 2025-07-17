@@ -102,3 +102,5 @@ python manage.py migrate
 
 Start the development server:
 python manage.py runserver 0.0.0.0:5000
+OR
+python manage.py runserver
